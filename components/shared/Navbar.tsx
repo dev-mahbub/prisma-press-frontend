@@ -15,6 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logout } from "@/service/logout";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const navItems = [
   { label: "Home", href: "#" },
@@ -29,12 +32,50 @@ const userMenuItems = [
   { label: "Settings", href: "#", icon: Settings },
 ];
 
-export function Navbar() {
+type IUser = {
+  success: boolean;
+  message: string;
+  data: {
+    profile: {
+      id: string;
+      name: string;
+      email: string;
+      role: string;
+      active_status: string;
+
+      created_at: string;
+      updated_at: string;
+      profile: {
+        id: string;
+        profile_photo: string;
+        bio: string | null;
+        userId: string;
+        created_at: string;
+        updated_at: string;
+      };
+    };
+  };
+};
+
+type NavbarProps = {
+  user: IUser;
+};
+
+export function Navbar({ user }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const router = useRouter();
+
+  const handleUserMenuAction = async (action: string) => {
+    if (action === "logout") {
+      await logout();
+      toast.success("User Logged Out Successfully!");
+      router.push("/login");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
         {/* Text logo */}
         <a
           href="#"
@@ -81,9 +122,11 @@ export function Navbar() {
               <DropdownMenuGroup>
                 <DropdownMenuLabel>
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-sm font-medium">Jane Doe</span>
+                    <span className="text-sm font-medium">
+                      {user.data?.profile.name}
+                    </span>
                     <span className="text-xs font-normal text-muted-foreground">
-                      jane@example.com
+                      {user.data?.profile.email}
                     </span>
                   </div>
                 </DropdownMenuLabel>
@@ -101,7 +144,12 @@ export function Navbar() {
                 })}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
+              <DropdownMenuItem
+                onClick={async () => {
+                  handleUserMenuAction("logout");
+                }}
+                variant="destructive"
+              >
                 <LogOut />
                 Log out
               </DropdownMenuItem>
