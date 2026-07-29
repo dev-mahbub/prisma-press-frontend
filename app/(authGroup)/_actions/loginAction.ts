@@ -1,55 +1,47 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 type actionPayloadType = {
-  success: true;
+  success: boolean;
   statusCode: number;
   message: string;
-  data: {
+  data?: {
     accessToken: string;
     refreshToken: string;
   };
 };
 
 export const loginAction = async (
-  prevState: actionPayloadType,
+  prevState: actionPayloadType | undefined,
   formData: FormData,
-) => {
+): Promise<actionPayloadType> => {
   const email = formData.get("email");
   const password = formData.get("password");
-  console.log(prevState, "prevstate");
-
-  const payload = {
-    email,
-    password,
-  };
 
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ email, password }),
   });
 
   const result = await res.json();
 
-  if (result.success) {
-    const cookieStore = await cookies();
-    cookieStore.set("accessToken", result.data.accessToken, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24,
-      sameSite: "lax",
-    });
-    cookieStore.set("refreshToken", result.data.refreshToken, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7,
-      sameSite: "lax",
-    });
+  if (!result.success) {
+    return result;
   }
 
-  if (result.success) {
-    redirect("/dashboard");
-  }
+  const cookieStore = await cookies();
+  cookieStore.set("accessToken", result.data.accessToken, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24,
+    sameSite: "lax",
+  });
+  cookieStore.set("refreshToken", result.data.refreshToken, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7,
+    sameSite: "lax",
+  });
+
   return result;
 };
