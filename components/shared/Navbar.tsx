@@ -20,10 +20,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const navItems = [
-  { label: "Home", href: "#" },
-  { label: "Features", href: "#" },
-  { label: "Pricing", href: "#" },
-  { label: "About", href: "#" },
+  { label: "Home", href: "/" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/payment" },
+  { label: "About", href: "/about" },
+  { label: "News", href: "/news" },
+  { label: "Premium", href: "/premium" },
 ];
 
 const userMenuItems = [
