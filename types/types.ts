@@ -1,4 +1,4 @@
-export interface PricingPlan {
+export type PricingPlan = {
   id: string;
   name: string;
   description: string;
@@ -8,25 +8,27 @@ export interface PricingPlan {
   priceId: string; // Stripe price ID
   features: string[];
   isPopular?: boolean;
-}
+};
 
-export interface IPost {
+export type IPost = {
   id: string;
   title: string;
   content: string;
   thumbnail: string;
   isFeatured: boolean;
-  status: "DRAFT" | "PUBLISHED";
+  status: IPostStatus;
   tags: string[];
   views: number;
   isPremium: boolean;
   authorId: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface PostFormState {
+export type IPostStatus = "DRAFT" | "PUBLISHED";
+
+export type PostFormState = {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
-}
+};
