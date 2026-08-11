@@ -5,6 +5,7 @@ import { IPost } from "@/types/types";
 
 const PremiumNewsList = async () => {
   const result = await getPremiumNews();
+  // console.log("premium", result);
 
   if (!result.success || result.data.length === 0) {
     return (

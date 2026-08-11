@@ -92,7 +92,10 @@ const PricingSection = async () => {
           </ul>
         </CardContent>
 
-        <CardFooter>{isActive && <SubscribeButton />}</CardFooter>
+        {/* <CardFooter>{isActive && <SubscribeButton />}</CardFooter> */}
+        <CardFooter>
+          <SubscribeButton />
+        </CardFooter>
       </Card>
     </div>
   );
