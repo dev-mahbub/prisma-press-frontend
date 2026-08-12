@@ -67,6 +67,9 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  if (pathname === "premium") {
+  }
+
   const isPublicRoute = PUBLIC_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(route + "/"),
   );

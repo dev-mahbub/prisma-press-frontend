@@ -16,7 +16,7 @@ const SubscribeButton = () => {
   }, [state]);
 
   return (
-    <form action={action}>
+    <form action={action} className="w-full">
       <Button type="submit" disabled={pending} className="w-full">
         {pending ? "Redirecting..." : "Subscribe"}
       </Button>

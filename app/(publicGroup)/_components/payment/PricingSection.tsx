@@ -11,16 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import SubscribeButton from "./SubscribeButton";
 import { PricingPlan } from "@/types/types";
+import { getSubscribeStatus } from "../../_actions/getSubscribeStatus";
 
 const PricingSection = async () => {
-  // Replace with a real fetch() call to your API once ready
-  const statusResult = {
-    success: true,
-    data: {
-      isSubscribed: true,
-      currentPeriodEnd: "2026-07-28T10:00:00.000Z",
-    },
-  };
+  const statusResult = await getSubscribeStatus();
 
   const isActive = Boolean(
     statusResult?.success && statusResult?.data?.isSubscribed,
@@ -44,14 +38,14 @@ const PricingSection = async () => {
   };
 
   return (
-    <div className="mx-auto max-w-md space-y-6">
+    <div className="mx-auto max-w-md space-y-6 min-w-125">
       {isActive && (
         <div className="flex items-center flex-col gap-3 rounded-lg border border-primary-foreground bg-neutral-200 px-4 py-3 text-lg text-natural-400 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
           <h1>
             <span className="text-shadow-emerald-600">Go</span> Premium
           </h1>
           <p className="text-center text-sm">
-            {` Subscribe to unlock premium news content. ${" "}`}
+            {` Renew subscription on. ${" "}`}
             <span className="font-medium">
               {new Date(statusResult.data.currentPeriodEnd).toLocaleDateString(
                 "en-US",
@@ -92,10 +86,7 @@ const PricingSection = async () => {
           </ul>
         </CardContent>
 
-        {/* <CardFooter>{isActive && <SubscribeButton />}</CardFooter> */}
-        <CardFooter>
-          <SubscribeButton />
-        </CardFooter>
+        <CardFooter>{!isActive && <SubscribeButton />}</CardFooter>
       </Card>
     </div>
   );
